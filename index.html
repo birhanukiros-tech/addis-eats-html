@@ -1,12 +1,854 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="description"
+      content="Addis Eats - Ethiopian food ordering website"
+    />
+
     <title>Addis Eats</title>
-    <style src="styles.css"></style>
-</head>
-<body>
-    
-</body>
+
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <header class="navbar">
+      <div class="navbar-container">
+        <a href="#home" class="logo"> Addis Eats </a>
+
+        <nav class="nav-links" id="nav-links" aria-label="Main navigation">
+          <a href="#home"> Home </a>
+
+          <a href="#menu"> Menu </a>
+
+          <a href="#favorites"> Favorites </a>
+
+          <a href="#orders"> Orders </a>
+
+          <button type="button" class="cart-button" id="cart-button">
+            Cart
+            <span id="cart-count">0</span>
+          </button>
+
+          <button
+            type="button"
+            class="signin-nav-button"
+            id="signin-nav-button"
+          >
+            Sign In
+          </button>
+        </nav>
+
+        <button
+          type="button"
+          class="mobile-menu-button"
+          id="mobile-menu-button"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+      </div>
+    </header>
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main>
+      <!-- =================================================
+             HOME / HERO
+        ================================================== -->
+
+      <section class="hero" id="home">
+        <div class="hero-content">
+          <p class="hero-label">Taste Ethiopia</p>
+
+          <h1>
+            Authentic Flavors,
+            <span>Made for You.</span>
+          </h1>
+
+          <p class="hero-description">
+            Discover traditional Ethiopian dishes, modern favorites, and
+            refreshing drinks delivered with care.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#menu" class="primary-button"> Explore Menu </a>
+
+            <a href="#favorites" class="secondary-button"> View Favorites </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================
+             MENU
+        ================================================== -->
+
+      <section class="menu-section" id="menu">
+        <div class="section-heading">
+          <p class="section-label">Our Menu</p>
+
+          <h2>Find Something Delicious</h2>
+
+          <p>
+            From traditional Ethiopian favorites to quick meals and refreshing
+            drinks.
+          </p>
+        </div>
+
+        <!-- SEARCH -->
+
+        <div class="menu-controls">
+          <label for="search-input" class="visually-hidden">
+            Search dishes
+          </label>
+
+          <input
+            type="search"
+            id="search-input"
+            class="search-input"
+            placeholder="Search for a dish..."
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- CATEGORIES -->
+
+        <div
+          class="category-bar"
+          id="category-bar"
+          aria-label="Food categories"
+        >
+          <button
+            type="button"
+            class="category-button active"
+            data-category="all"
+          >
+            All
+          </button>
+
+          <button
+            type="button"
+            class="category-button"
+            data-category="traditional"
+          >
+            Traditional
+          </button>
+
+          <button
+            type="button"
+            class="category-button"
+            data-category="breakfast"
+          >
+            Breakfast
+          </button>
+
+          <button type="button" class="category-button" data-category="fasting">
+            Fasting
+          </button>
+
+          <button type="button" class="category-button" data-category="snacks">
+            Snacks
+          </button>
+
+          <button
+            type="button"
+            class="category-button"
+            data-category="fast-food"
+          >
+            Fast Food
+          </button>
+
+          <button type="button" class="category-button" data-category="drinks">
+            Drinks
+          </button>
+        </div>
+
+        <!-- DISH LIST -->
+
+        <div class="dish-list" id="dish-list">
+          <!-- JavaScript will render dishes -->
+        </div>
+
+        <!-- EMPTY STATE -->
+
+        <div class="empty-state" id="menu-empty-state" hidden>
+          <div class="empty-state-icon">🍽️</div>
+
+          <h3>No dishes found</h3>
+
+          <p>Try another search or choose another category.</p>
+        </div>
+
+        <!-- ERROR STATE -->
+
+        <div class="error-state" id="menu-error-state" hidden>
+          <div class="error-state-icon">⚠️</div>
+
+          <h3>Something went wrong</h3>
+
+          <p>We couldn't load the menu right now.</p>
+
+          <button type="button" id="retry-menu" class="primary-button">
+            Try Again
+          </button>
+        </div>
+      </section>
+
+      <!-- =================================================
+             FAVORITES
+        ================================================== -->
+
+      <section class="favorites-section" id="favorites">
+        <div class="section-heading">
+          <p class="section-label">Your Collection</p>
+
+          <h2>Favorite Dishes</h2>
+
+          <p>Keep the dishes you love close.</p>
+        </div>
+
+        <div class="favorites-list" id="favorites-list">
+          <!-- JavaScript will render favorites -->
+        </div>
+
+        <div class="empty-state" id="favorites-empty-state" hidden>
+          <div class="empty-state-icon">♡</div>
+
+          <h3>No favorites yet</h3>
+
+          <p>Tap the heart on a dish to save it here.</p>
+        </div>
+      </section>
+
+      <!-- =================================================
+             SIGN IN
+        ================================================== -->
+
+      <section class="auth-section" id="signin">
+        <div class="auth-card">
+          <div class="auth-heading">
+            <p class="section-label">Welcome Back</p>
+
+            <h2>Sign In</h2>
+
+            <p>Sign in to continue to checkout and manage your orders.</p>
+          </div>
+
+          <form id="signin-form" class="auth-form">
+            <div class="form-group">
+              <label for="username"> Username </label>
+
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter your username"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="password"> Password </label>
+
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <p class="form-error" id="signin-error" hidden></p>
+
+            <button type="submit" class="primary-button full-width">
+              Sign In
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- =================================================
+             CHECKOUT / PLACE ORDER
+        ================================================== -->
+
+      <section class="checkout-section" id="checkout">
+        <div class="section-heading">
+          <p class="section-label">Place Your Order</p>
+
+          <h2>Checkout</h2>
+
+          <p>Complete your details and place your order.</p>
+        </div>
+
+        <div class="checkout-layout">
+          <!-- CHECKOUT FORM -->
+
+          <div class="checkout-card">
+            <h3>Delivery Information</h3>
+
+            <form id="checkout-form" class="checkout-form">
+              <div class="form-group">
+                <label for="customer-name"> Full Name </label>
+
+                <input
+                  type="text"
+                  id="customer-name"
+                  name="customerName"
+                  placeholder="Your full name"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="customer-phone"> Phone Number </label>
+
+                <input
+                  type="tel"
+                  id="customer-phone"
+                  name="phone"
+                  placeholder="09XXXXXXXX"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="customer-address"> Delivery Address </label>
+
+                <textarea
+                  id="customer-address"
+                  name="address"
+                  rows="4"
+                  placeholder="Enter your delivery address"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="payment-method"> Payment Method </label>
+
+                <select id="payment-method" name="paymentMethod" required>
+                  <option value="">Select payment method</option>
+
+                  <option value="cash">Cash on Delivery</option>
+
+                  <option value="telebirr">Telebirr</option>
+
+                  <option value="card">Card</option>
+                </select>
+              </div>
+
+              <p class="form-error" id="checkout-error" hidden></p>
+
+              <button type="submit" class="primary-button full-width">
+                Place Order
+              </button>
+            </form>
+          </div>
+
+          <!-- ORDER SUMMARY -->
+
+          <aside class="order-summary-card">
+            <h3>Order Summary</h3>
+
+            <div class="checkout-items" id="checkout-items">
+              <!-- JavaScript will render checkout items -->
+            </div>
+
+            <div class="summary-row">
+              <span> Subtotal </span>
+
+              <strong id="checkout-subtotal"> 0 ETB </strong>
+            </div>
+
+            <div class="summary-row">
+              <span> Delivery </span>
+
+              <strong id="checkout-delivery"> 0 ETB </strong>
+            </div>
+
+            <div class="summary-total">
+              <span> Total </span>
+
+              <strong id="checkout-total"> 0 ETB </strong>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- =================================================
+             ORDER CONFIRMATION
+        ================================================== -->
+
+      <section class="confirmation-section" id="order-confirmation" hidden>
+        <div class="confirmation-card">
+          <div class="confirmation-icon">✓</div>
+
+          <p class="section-label">Order Confirmed</p>
+
+          <h2>Thank You for Your Order!</h2>
+
+          <p>Your order has been received and is being prepared.</p>
+
+          <div class="confirmation-details">
+            <div>
+              <span> Order Number </span>
+
+              <strong id="confirmation-order-id"> — </strong>
+            </div>
+
+            <div>
+              <span> Total </span>
+
+              <strong id="confirmation-total"> 0 ETB </strong>
+            </div>
+          </div>
+
+          <div class="confirmation-actions">
+            <a href="#orders" class="primary-button"> View Order History </a>
+
+            <a href="#menu" class="secondary-button"> Continue Shopping </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================
+             ORDER HISTORY
+        ================================================== -->
+
+      <section class="orders-section" id="orders">
+        <div class="section-heading">
+          <p class="section-label">Your Orders</p>
+
+          <h2>Order History</h2>
+
+          <p>View your previous Addis Eats orders.</p>
+        </div>
+
+        <div class="orders-list" id="orders-list">
+          <!-- JavaScript will render orders -->
+        </div>
+
+        <div class="empty-state" id="orders-empty-state" hidden>
+          <div class="empty-state-icon">📦</div>
+
+          <h3>No orders yet</h3>
+
+          <p>Your completed orders will appear here.</p>
+
+          <a href="#menu" class="primary-button"> Explore Menu </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- =====================================================
+         CART OVERLAY
+    ====================================================== -->
+
+    <div class="cart-overlay" id="cart-overlay" hidden></div>
+
+    <!-- =====================================================
+         CART DRAWER
+    ====================================================== -->
+
+    <aside
+      class="cart-drawer"
+      id="cart-drawer"
+      aria-label="Shopping cart"
+      aria-hidden="true"
+    >
+      <div class="cart-drawer-header">
+        <div>
+          <p class="cart-label">Your Selection</p>
+
+          <h2>Your Cart</h2>
+        </div>
+
+        <button
+          type="button"
+          id="close-cart"
+          class="close-cart-button"
+          aria-label="Close cart"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="cart-drawer-items" id="cart-drawer-items">
+        <!-- JavaScript will render cart items -->
+      </div>
+
+      <div class="cart-empty-state" id="cart-empty-state" hidden>
+        <div>🛒</div>
+
+        <h3>Your cart is empty</h3>
+
+        <p>Add something delicious from the menu.</p>
+      </div>
+
+      <div class="cart-drawer-footer">
+        <div class="cart-drawer-total">
+          <span> Total </span>
+
+          <strong id="cart-total"> 0 ETB </strong>
+        </div>
+
+        <button type="button" class="checkout-button" id="checkout-button">
+          Proceed to Checkout
+        </button>
+      </div>
+    </aside>
+
+    <!-- =====================================================
+         DISH DETAILS MODAL
+    ====================================================== -->
+
+    <div class="modal-overlay" id="dish-modal" hidden>
+      <div
+        class="dish-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dish-modal-title"
+      >
+        <button
+          type="button"
+          class="modal-close"
+          id="close-dish-modal"
+          aria-label="Close dish details"
+        >
+          ×
+        </button>
+
+        <div id="dish-modal-content">
+          <!-- JavaScript will render dish details -->
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         TOAST / IMMEDIATE FEEDBACK
+    ====================================================== -->
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <!-- =====================================================
+         ADMIN LOGIN
+    ====================================================== -->
+
+    <section class="admin-login-section" id="admin-login" hidden>
+      <div class="admin-auth-card">
+        <p class="section-label">Administration</p>
+
+        <h2>Admin Login</h2>
+
+        <p>Sign in to manage Addis Eats.</p>
+
+        <form id="admin-login-form" class="auth-form">
+          <div class="form-group">
+            <label for="admin-username"> Username </label>
+
+            <input type="text" id="admin-username" required />
+          </div>
+
+          <div class="form-group">
+            <label for="admin-password"> Password </label>
+
+            <input type="password" id="admin-password" required />
+          </div>
+
+          <p class="form-error" id="admin-login-error" hidden></p>
+
+          <button type="submit" class="primary-button full-width">
+            Admin Sign In
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         ADMIN DASHBOARD
+    ====================================================== -->
+
+    <section class="admin-dashboard" id="admin-dashboard" hidden>
+      <div class="admin-dashboard-header">
+        <div>
+          <p class="section-label">Administration</p>
+
+          <h2>Addis Eats Dashboard</h2>
+
+          <p>Manage dishes, orders, and restaurant activity.</p>
+        </div>
+
+        <button type="button" id="admin-logout" class="secondary-button">
+          Admin Logout
+        </button>
+      </div>
+
+      <!-- ADMIN STATISTICS -->
+
+      <div class="admin-stats">
+        <div class="admin-stat-card">
+          <span> Total Orders </span>
+
+          <strong id="admin-total-orders"> 0 </strong>
+        </div>
+
+        <div class="admin-stat-card">
+          <span> Total Revenue </span>
+
+          <strong id="admin-total-revenue"> 0 ETB </strong>
+        </div>
+
+        <div class="admin-stat-card">
+          <span> Active Dishes </span>
+
+          <strong id="admin-active-dishes"> 0 </strong>
+        </div>
+
+        <div class="admin-stat-card">
+          <span> Pending Orders </span>
+
+          <strong id="admin-pending-orders"> 0 </strong>
+        </div>
+      </div>
+
+      <!-- =================================================
+             SALES / REVENUE CHART
+        ================================================== -->
+
+      <div class="admin-panel">
+        <div class="admin-panel-header">
+          <div>
+            <p class="section-label">Performance</p>
+
+            <h3>Sales by Dish</h3>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="sales-chart" aria-label="Sales revenue chart"></canvas>
+        </div>
+      </div>
+
+      <!-- =================================================
+             DISH MANAGEMENT
+        ================================================== -->
+
+      <div class="admin-panel">
+        <div class="admin-panel-header">
+          <div>
+            <p class="section-label">Menu Management</p>
+
+            <h3>Manage Dishes</h3>
+          </div>
+
+          <button type="button" id="add-dish-button" class="primary-button">
+            Add Dish
+          </button>
+        </div>
+
+        <div class="admin-dish-list" id="admin-dish-list">
+          <!-- JavaScript will render admin dishes -->
+        </div>
+      </div>
+
+      <!-- =================================================
+             ORDER MANAGEMENT
+        ================================================== -->
+
+      <div class="admin-panel">
+        <div class="admin-panel-header">
+          <div>
+            <p class="section-label">Order Management</p>
+
+            <h3>Customer Orders</h3>
+          </div>
+        </div>
+
+        <div class="admin-order-list" id="admin-order-list">
+          <!-- JavaScript will render admin orders -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         ADMIN DISH FORM MODAL
+    ====================================================== -->
+
+    <div class="modal-overlay" id="admin-dish-modal" hidden>
+      <div
+        class="admin-dish-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="admin-dish-modal-title"
+      >
+        <button
+          type="button"
+          class="modal-close"
+          id="close-admin-dish-modal"
+          aria-label="Close dish form"
+        >
+          ×
+        </button>
+
+        <p class="section-label">Menu Management</p>
+
+        <h2 id="admin-dish-modal-title">Add Dish</h2>
+
+        <form id="admin-dish-form" class="admin-dish-form">
+          <input type="hidden" id="admin-dish-id" />
+
+          <div class="form-group">
+            <label for="admin-dish-name"> Dish Name </label>
+
+            <input type="text" id="admin-dish-name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="admin-dish-description"> Description </label>
+
+            <textarea id="admin-dish-description" rows="3" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="admin-dish-price"> Price </label>
+
+            <input type="number" id="admin-dish-price" min="0" required />
+          </div>
+
+          <div class="form-group">
+            <label for="admin-dish-category"> Category </label>
+
+            <select id="admin-dish-category" required>
+              <option value="">Select category</option>
+
+              <option value="traditional">Traditional</option>
+
+              <option value="breakfast">Breakfast</option>
+
+              <option value="fasting">Fasting</option>
+
+              <option value="snacks">Snacks</option>
+
+              <option value="fast-food">Fast Food</option>
+
+              <option value="drinks">Drinks</option>
+            </select>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" id="admin-dish-spicy" />
+
+              Spicy
+            </label>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" id="admin-dish-enabled" checked />
+
+              Dish Enabled
+            </label>
+          </div>
+
+          <div class="admin-form-actions">
+            <button
+              type="button"
+              id="cancel-admin-dish"
+              class="secondary-button"
+            >
+              Cancel
+            </button>
+
+            <button type="submit" class="primary-button">Save Dish</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="footer">
+      <div class="footer-content">
+        <!-- BRAND -->
+
+        <div class="footer-brand">
+          <h2>Addis Eats</h2>
+
+          <p>
+            A modern taste of Ethiopia, from traditional favorites to everyday
+            comfort food.
+          </p>
+        </div>
+
+        <!-- QUICK LINKS -->
+
+        <div class="footer-column">
+          <h3>Explore</h3>
+
+          <a href="#home"> Home </a>
+
+          <a href="#menu"> Menu </a>
+
+          <a href="#favorites"> Favorites </a>
+
+          <a href="#orders"> Order History </a>
+        </div>
+
+        <!-- CATEGORIES -->
+
+        <div class="footer-column">
+          <h3>Categories</h3>
+
+          <a href="#menu"> Traditional </a>
+
+          <a href="#menu"> Breakfast </a>
+
+          <a href="#menu"> Fasting </a>
+
+          <a href="#menu"> Fast Food </a>
+
+          <a href="#menu"> Drinks </a>
+        </div>
+
+        <!-- CONTACT -->
+
+        <div class="footer-column">
+          <h3>Contact</h3>
+
+          <p>Addis Ababa, Ethiopia</p>
+
+          <p>Fresh food. Delivered with care.</p>
+
+          <a href="#signin"> Sign In </a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Addis Eats. All rights reserved.</p>
+
+        <p>Built with HTML, CSS & JavaScript.</p>
+      </div>
+    </footer>
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="js/app.js" defer></script>
+  </body>
 </html>

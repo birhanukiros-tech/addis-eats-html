@@ -1,0 +1,209 @@
+[
+  {
+    "id": 1,
+    "name": "Shiro",
+    "description": "Smooth Ethiopian chickpea stew served with injera.",
+    "price": 200,
+    "category": "fasting",
+    "spicy": true,
+    "image": "images/shiro.png"
+  },
+  {
+    "id": 2,
+    "name": "Beyaynetu",
+    "description": "A colorful combination of Ethiopian fasting dishes served with injera.",
+    "price": 300,
+    "category": "fasting",
+    "spicy": true,
+    "image": "images/beyaynetu.png"
+  },
+  {
+    "id": 3,
+    "name": "Firfir",
+    "description": "Pieces of injera mixed with a flavorful Ethiopian sauce.",
+    "price": 250,
+    "category": "fasting",
+    "spicy": true,
+    "image": "images/firfir.png"
+  },
+  {
+    "id": 4,
+    "name": "Doro Wet",
+    "description": "Traditional Ethiopian chicken stew prepared with berbere and spices.",
+    "price": 600,
+    "category": "traditional",
+    "spicy": true,
+    "image": "images/doro-wet.png"
+  },
+  {
+    "id": 5,
+    "name": "Kitfo",
+    "description": "Seasoned Ethiopian minced beef dish served with traditional sides.",
+    "price": 500,
+    "category": "traditional",
+    "spicy": true,
+    "image": "images/kitfo.png"
+  },
+  {
+    "id": 6,
+    "name": "Dulet",
+    "description": "Traditional Ethiopian dish made with finely chopped meat and spices.",
+    "price": 450,
+    "category": "traditional",
+    "spicy": true,
+    "image": "images/dulet.png"
+  },
+  {
+    "id": 7,
+    "name": "Tibs",
+    "description": "Sautéed meat prepared with onions, peppers, and Ethiopian spices.",
+    "price": 550,
+    "category": "traditional",
+    "spicy": true,
+    "image": "images/tibs.png"
+  },
+  {
+    "id": 8,
+    "name": "Misir Wot",
+    "description": "Spiced Ethiopian red lentil stew served with injera.",
+    "price": 220,
+    "category": "fasting",
+    "spicy": true,
+    "image": "images/misir-wot.png"
+  },
+  {
+    "id": 9,
+    "name": "Gomen",
+    "description": "Seasoned Ethiopian collard greens prepared with traditional spices.",
+    "price": 200,
+    "category": "fasting",
+    "spicy": false,
+    "image": "images/gomen.png"
+  },
+  {
+    "id": 10,
+    "name": "Azifa",
+    "description": "Ethiopian lentil salad prepared with fresh vegetables and spices.",
+    "price": 200,
+    "category": "fasting",
+    "spicy": false,
+    "image": "images/azifz.png"
+  },
+  {
+    "id": 11,
+    "name": "Chechebsa",
+    "description": "Traditional Ethiopian breakfast made with torn flatbread, spices, and butter.",
+    "price": 250,
+    "category": "breakfast",
+    "spicy": false,
+    "image": "images/chechebsa.png"
+  },
+  {
+    "id": 12,
+    "name": "Genfo",
+    "description": "Traditional Ethiopian porridge served with a spiced butter sauce.",
+    "price": 220,
+    "category": "breakfast",
+    "spicy": false,
+    "image": "images/genfo.png"
+  },
+  {
+    "id": 13,
+    "name": "Sambusa",
+    "description": "Crispy pastry filled with seasoned lentils and vegetables.",
+    "price": 100,
+    "category": "snacks",
+    "spicy": true,
+    "image": "images/sambusa.png"
+  },
+  {
+    "id": 14,
+    "name": "French Fries",
+    "description": "Crispy golden fries served as a delicious snack or side.",
+    "price": 150,
+    "category": "snacks",
+    "spicy": false,
+    "image": "images/french-fries.png"
+  },
+  {
+    "id": 15,
+    "name": "Burger",
+    "description": "Juicy burger served with fresh vegetables and a soft bun.",
+    "price": 400,
+    "category": "fast-food",
+    "spicy": false,
+    "image": "images/burger.png"
+  },
+  {
+    "id": 16,
+    "name": "Pizza",
+    "description": "Freshly prepared pizza topped with cheese and flavorful ingredients.",
+    "price": 500,
+    "category": "fast-food",
+    "spicy": false,
+    "image": "images/pizza.png"
+  },
+  {
+    "id": 17,
+    "name": "Pasta",
+    "description": "Delicious pasta prepared with a rich and flavorful sauce.",
+    "price": 350,
+    "category": "fast-food",
+    "spicy": false,
+    "image": "images/pasta.png"
+  },
+  {
+    "id": 18,
+    "name": "Macaroni",
+    "description": "Classic macaroni prepared with a creamy and flavorful sauce.",
+    "price": 300,
+    "category": "fast-food",
+    "spicy": false,
+    "image": "images/mokoreni.png"
+  },
+  {
+    "id": 19,
+    "name": "Water",
+    "description": "Refreshing bottled drinking water.",
+    "price": 40,
+    "category": "drinks",
+    "spicy": false,
+    "image": "images/water.png"
+  },
+  {
+    "id": 20,
+    "name": "Coca-Cola",
+    "description": "Chilled Coca-Cola soft drink.",
+    "price": 80,
+    "category": "drinks",
+    "spicy": false,
+    "image": "images/coca-cola.png"
+  },
+  {
+    "id": 21,
+    "name": "Fanta",
+    "description": "Refreshing orange-flavored soft drink.",
+    "price": 80,
+    "category": "drinks",
+    "spicy": false,
+    "image": "images/fanta.png"
+  },
+  {
+    "id": 22,
+    "name": "Ethiopian Coffee",
+    "description": "Freshly brewed Ethiopian coffee with a rich traditional flavor.",
+    "price": 100,
+    "category": "drinks",
+    "spicy": false,
+    "image": "images/coffe.png"
+  },
+  {
+    "id": 23,
+    "name": "Mango Juice",
+    "description": "Fresh and refreshing mango juice.",
+    "price": 150,
+    "category": "drinks",
+    "spicy": false,
+    "image": "images/mango-juce.png"
+  }
+]
