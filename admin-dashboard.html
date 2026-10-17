@@ -1,13 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta
-    name="description"
-    content="Manage Addis Eats dishes, customer orders, and sales."
-  />
+  <meta name="description" content="Manage Addis Eats dishes, customer orders, and sales." />
   <meta name="theme-color" content="#176b4d" />
 
   <title>Admin Dashboard | Addis Eats</title>
@@ -60,15 +56,12 @@
           Sign out
         </button>
 
-        <a class="back-to-store-link" href="index.html">
-          ← View customer storefront
-        </a>
+        <a class="back-to-store-link" href="index.html">← View customer storefront</a>
       </div>
     </aside>
 
     <!-- MAIN CONTENT -->
     <main class="dashboard-main">
-
       <header class="dashboard-topbar">
         <div class="dashboard-topbar-heading">
           <button
@@ -78,9 +71,7 @@
             aria-label="Open dashboard navigation"
             aria-controls="dashboard-sidebar"
             aria-expanded="false"
-          >
-            ☰
-          </button>
+          >☰</button>
 
           <div>
             <p class="eyebrow">ADDIS EATS / ADMIN</p>
@@ -99,11 +90,7 @@
       <div class="dashboard-content">
 
         <!-- OVERVIEW -->
-        <section
-          class="admin-content-section active"
-          id="overview"
-          data-admin-panel="overview"
-        >
+        <section class="admin-content-section active" id="overview" data-admin-panel="overview">
           <div class="dashboard-welcome">
             <div>
               <h2>Welcome back, <span id="welcome-admin-name">Admin</span>!</h2>
@@ -116,18 +103,14 @@
             </span>
           </div>
 
-          <!-- SUMMARY CARDS -->
           <div class="dashboard-stats-grid">
-
             <article class="dashboard-stat-card">
               <div class="stat-card-top">
                 <span class="stat-label">Total dishes</span>
                 <span class="stat-icon green-icon" aria-hidden="true">♨</span>
               </div>
               <p class="stat-value" id="stat-total-dishes">—</p>
-              <p class="stat-description">
-                <span id="stat-active-dishes">—</span> available to customers
-              </p>
+              <p class="stat-description"><span id="stat-active-dishes">—</span> available to customers</p>
             </article>
 
             <article class="dashboard-stat-card">
@@ -156,12 +139,10 @@
               <p class="stat-value" id="stat-pending-orders">—</p>
               <p class="stat-description">Orders awaiting completion</p>
             </article>
-
           </div>
 
           <!-- CHARTS -->
           <div class="dashboard-charts-grid">
-
             <article class="dashboard-panel sales-panel">
               <div class="panel-heading">
                 <div>
@@ -169,9 +150,7 @@
                   <p>Revenue from recorded orders</p>
                 </div>
 
-                <label class="chart-filter-label" for="sales-chart-period">
-                  Period
-                </label>
+                <label class="chart-filter-label" for="sales-chart-period">Period</label>
                 <select id="sales-chart-period">
                   <option value="7">Last 7 days</option>
                   <option value="30">Last 30 days</option>
@@ -183,12 +162,7 @@
                 <span id="chart-period-description">Last 7 days</span>
               </div>
 
-              <div
-                class="sales-chart"
-                id="sales-chart"
-                role="img"
-                aria-label="Sales chart will appear when dashboard data is loaded"
-              >
+              <div class="sales-chart" id="sales-chart" role="img" aria-label="Sales chart">
                 <div class="chart-empty-state">
                   <span aria-hidden="true">▥</span>
                   <p>Sales chart will appear here.</p>
@@ -204,12 +178,7 @@
                 </div>
               </div>
 
-              <div
-                class="order-status-chart"
-                id="order-status-chart"
-                role="img"
-                aria-label="Order status chart will appear when dashboard data is loaded"
-              >
+              <div class="order-status-chart" id="order-status-chart" role="img" aria-label="Order status chart">
                 <div class="chart-empty-state">
                   <span aria-hidden="true">◉</span>
                   <p>Order status breakdown will appear here.</p>
@@ -218,7 +187,6 @@
 
               <div class="order-status-legend" id="order-status-legend"></div>
             </article>
-
           </div>
 
           <!-- RECENT ORDERS -->
@@ -229,11 +197,7 @@
                 <p>The latest customer orders recorded in this browser</p>
               </div>
 
-              <button
-                class="text-action-button"
-                type="button"
-                data-open-admin-section="order-management"
-              >
+              <button class="text-action-button" type="button" data-open-admin-section="order-management">
                 View all orders →
               </button>
             </div>
@@ -250,11 +214,7 @@
                   </tr>
                 </thead>
                 <tbody id="recent-orders-table">
-                  <tr>
-                    <td colspan="5" class="table-empty-state">
-                      Order data will appear here.
-                    </td>
-                  </tr>
+                  <tr><td colspan="5" class="table-empty-state">Order data will appear here.</td></tr>
                 </tbody>
               </table>
             </div>
@@ -262,14 +222,10 @@
         </section>
 
         <!-- MENU MANAGEMENT -->
-        <section
-          class="admin-content-section"
-          id="menu-management"
-          data-admin-panel="menu-management"
-          hidden
-        >
+        <section class="admin-content-section" id="menu-management" data-admin-panel="menu-management" hidden>
           <div class="section-intro">
             <div>
+              <p class="eyebrow">YOUR RESTAURANT</p>
               <h2>Menu management</h2>
               <p>Add dishes, update prices, and control what customers can order.</p>
             </div>
@@ -303,41 +259,22 @@
             </label>
           </div>
 
-          <article class="dashboard-panel menu-table-panel">
-            <div class="admin-table-wrapper">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th scope="col">Dish</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Availability</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="admin-menu-table">
-                  <tr>
-                    <td colspan="5" class="table-empty-state">
-                      Menu data will appear here.
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          <!-- DISH CARDS: rendered by js/admin.js -->
+          <div class="admin-menu-grid" id="admin-menu-grid" aria-live="polite">
+            <div class="admin-menu-empty">
+              <span aria-hidden="true">🍽️</span>
+              <h3>Your menu is loading</h3>
+              <p>Your dishes will appear here.</p>
             </div>
+          </div>
 
-            <div class="table-footer">
-              <span id="admin-menu-count">0 dishes</span>
-            </div>
-          </article>
+          <div class="menu-grid-footer">
+            <span id="admin-menu-count">0 dishes</span>
+          </div>
         </section>
 
         <!-- ORDER MANAGEMENT -->
-        <section
-          class="admin-content-section"
-          id="order-management"
-          data-admin-panel="order-management"
-          hidden
-        >
+        <section class="admin-content-section" id="order-management" data-admin-panel="order-management" hidden>
           <div class="section-intro">
             <div>
               <h2>Order management</h2>
@@ -403,17 +340,12 @@
                   </tr>
                 </thead>
                 <tbody id="admin-orders-table">
-                  <tr>
-                    <td colspan="7" class="table-empty-state">
-                      Order data will appear here.
-                    </td>
-                  </tr>
+                  <tr><td colspan="7" class="table-empty-state">Order data will appear here.</td></tr>
                 </tbody>
               </table>
             </div>
           </article>
         </section>
-
       </div>
 
       <footer class="dashboard-footer">
@@ -432,14 +364,7 @@
           <h2 id="dish-dialog-title">Add a dish</h2>
         </div>
 
-        <button
-          class="dialog-close-button"
-          id="close-dish-dialog"
-          type="button"
-          aria-label="Close dish form"
-        >
-          ×
-        </button>
+        <button class="dialog-close-button" id="close-dish-dialog" type="button" aria-label="Close dish form">×</button>
       </div>
 
       <input id="dish-id" name="id" type="hidden" />
@@ -462,16 +387,10 @@
 
         <div class="admin-field">
           <label for="dish-category">Category</label>
-          <input
-            id="dish-category"
-            name="category"
-            type="text"
-            list="dish-category-options"
-            maxlength="60"
-            required
-          />
+          <input id="dish-category" name="category" type="text" list="dish-category-options" maxlength="60" required />
           <datalist id="dish-category-options">
             <option value="fasting"></option>
+            <option value="non-fasting"></option>
             <option value="traditional"></option>
             <option value="breakfast"></option>
             <option value="snacks"></option>
@@ -483,14 +402,7 @@
 
       <div class="admin-field">
         <label for="dish-image">Image path or URL</label>
-        <input
-          id="dish-image"
-          name="image"
-          type="text"
-          maxlength="500"
-          placeholder="images/shiro.png"
-          required
-        />
+        <input id="dish-image" name="image" type="text" maxlength="500" placeholder="images/shiro.png" required />
         <p class="field-hint">Use an existing project image path, such as images/shiro.png.</p>
       </div>
 
@@ -500,18 +412,41 @@
       </label>
 
       <div class="dialog-actions">
-        <button class="admin-secondary-button" id="cancel-dish-button" type="button">
-          Cancel
-        </button>
-        <button class="admin-primary-button" type="submit">
-          Save dish
-        </button>
+        <button class="admin-secondary-button" id="cancel-dish-button" type="button">Cancel</button>
+        <button class="admin-primary-button" type="submit">Save dish</button>
       </div>
     </form>
   </dialog>
 
+  <!-- CUSTOM DELETE CONFIRMATION -->
+  <dialog class="admin-dialog admin-confirm-dialog" id="delete-dish-dialog" aria-labelledby="delete-dialog-title">
+    <div class="admin-dialog-form">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">MENU MANAGEMENT</p>
+          <h2 id="delete-dialog-title">Delete this dish?</h2>
+        </div>
+
+        <button class="dialog-close-button" id="close-delete-dialog" type="button" aria-label="Close confirmation">×</button>
+      </div>
+
+      <div class="delete-confirm-content">
+        <div class="delete-confirm-icon" aria-hidden="true">!</div>
+        <p>
+          Are you sure you want to delete
+          <strong id="delete-dish-name">this dish</strong>?
+        </p>
+        <p class="field-hint">This removes the dish from the admin menu saved in this browser.</p>
+      </div>
+
+      <div class="dialog-actions">
+        <button class="admin-secondary-button" id="cancel-delete-dish" type="button">Keep dish</button>
+        <button class="admin-danger-button" id="confirm-delete-dish" type="button">Delete dish</button>
+      </div>
+    </div>
+  </dialog>
+
   <!-- FEEDBACK MESSAGE -->
   <div class="admin-toast" id="admin-toast" role="status" aria-live="polite" hidden></div>
-
 </body>
 </html>
