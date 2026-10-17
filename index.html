@@ -372,55 +372,87 @@
       <!-- =========================
            SIGN IN
       ========================== -->
-      <section class="signin-section section" id="signin" hidden>
-        <div class="container auth-container">
-          <div class="auth-card">
-            <div class="auth-heading">
-              <span class="section-kicker"> Welcome back </span>
+      
+<section class="signin-section section" id="signin" hidden>
+  <div class="container auth-container">
+    <div class="auth-card">
+      <div class="auth-heading">
+        <span class="section-kicker">Welcome back</span>
 
-              <h2>Sign In</h2>
+        <h2>Sign In</h2>
+      </div>
 
-              <p>Sign in to continue to checkout and manage your orders.</p>
-            </div>
+      <div class="demo-credentials">
+        <p class="demo-credentials-title">Demo Account</p>
 
-            <form id="signin-form" novalidate>
-              <div class="form-group">
-                <label for="signin-username"> Username </label>
+        <p>
+          <strong>Username:</strong>
+          <code>customer</code>
+        </p>
 
-                <input
-                  type="text"
-                  id="signin-username"
-                  name="username"
-                  autocomplete="off"
-                  required
-                />
+        <p>
+          <strong>Password:</strong>
+          <code>1234</code>
+        </p>
 
-                <small class="field-error" id="signin-username-error"></small>
-              </div>
+        <p class="demo-credentials-note">
+          Use these details to try the customer checkout experience.
+        </p>
+      </div>
 
-              <div class="form-group">
-                <label for="signin-password"> Password </label>
+      <form id="signin-form" novalidate>
+        <div class="form-group">
+          <label for="signin-username">Username</label>
 
-                <input
-                  type="password"
-                  id="signin-password"
-                  name="password"
-                  autocomplete="off"
-                  required
-                />
+          <input
+            type="text"
+            id="signin-username"
+            name="username"
+            autocomplete="username"
+            required
+          />
 
-                <small class="field-error" id="signin-password-error"></small>
-              </div>
-
-              <p class="form-error" id="signin-error" hidden></p>
-
-              <button type="submit" class="button button-primary button-full">
-                Sign In
-              </button>
-            </form>
-          </div>
+          <small
+            class="field-error"
+            id="signin-username-error"
+            hidden
+          ></small>
         </div>
-      </section>
+
+        <div class="form-group">
+          <label for="signin-password">Password</label>
+
+          <input
+            type="password"
+            id="signin-password"
+            name="password"
+            autocomplete="current-password"
+            required
+          />
+
+          <small
+            class="field-error"
+            id="signin-password-error"
+            hidden
+          ></small>
+        </div>
+
+        <p class="form-error" id="signin-error" hidden></p>
+
+        <button
+          type="submit"
+          class="button button-primary button-full"
+        >
+          Sign In
+        </button>
+
+        <p class="signin-helper-text">
+          Sign in to continue to checkout and manage your orders.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
 
       <!-- =========================
            CHECKOUT

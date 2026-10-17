@@ -2963,6 +2963,57 @@ textarea:focus-visible {
   color: #8fc5f7;
 }
 
+
+/* =========================================================
+   CUSTOMER SIGN-IN — DEMO CREDENTIALS
+   ========================================================= */
+
+.demo-credentials {
+  margin-bottom: 24px;
+  padding: 16px 18px;
+
+  background: rgba(23, 107, 77, 0.08);
+  border: 1px solid rgba(23, 107, 77, 0.2);
+  border-radius: 14px;
+}
+
+.demo-credentials-title {
+  margin: 0 0 10px;
+  color: var(--primary);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.demo-credentials p {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.demo-credentials code {
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: rgba(23, 107, 77, 0.1);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.demo-credentials .demo-credentials-note {
+  margin-top: 12px;
+  margin-bottom: 0;
+  color: var(--text-muted, #666);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.signin-helper-text {
+  margin: 14px 0 0;
+  color: var(--text-muted, #666);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+
 /* =========================================================
    END OF CUSTOMER STYLES
    ========================================================= */
