@@ -1,3 +1,4 @@
+
 /* =========================================================
    ADDIS EATS - MAIN APP
    ========================================================= */
@@ -9,6 +10,10 @@
 let allDishes = [];
 let filteredDishes = [];
 let selectedDish = null;
+
+let previousDishModalFocus = null;
+
+const LAST_SECTION_STORAGE_KEY = "addiseats_last_section";
 
 
 /* =========================================================
@@ -80,20 +85,68 @@ if (oldSkeleton) {
    SECTION / PAGE NAVIGATION
    ========================================================= */
 
+function isValidSection(sectionId) {
+  return Array.from(sections).some(
+    (section) => section.id === sectionId
+  );
+}
+
 function showSection(sectionId) {
+  if (!isValidSection(sectionId)) {
+    console.warn(`Addis Eats: section "${sectionId}" was not found.`);
+    return;
+  }
+
   sections.forEach((section) => {
     section.hidden = section.id !== sectionId;
   });
 
+  // Remember the section so refresh returns to the same place.
+  try {
+    localStorage.setItem(
+      LAST_SECTION_STORAGE_KEY,
+      sectionId
+    );
+  } catch (error) {
+    console.warn("Could not remember the current section.", error);
+  }
+
   window.scrollTo({
     top: 0,
-    behavior: "smooth",
+    behavior: "auto",
   });
 
- if (sectionId === "orders" && typeof renderOrders === "function") {
-  renderOrders();
+  if (
+    sectionId === "orders" &&
+    typeof renderOrders === "function"
+  ) {
+    renderOrders();
   }
+
+  if (
+    sectionId === "favorites" &&
+    typeof renderFavorites === "function"
+  ) {
+    renderFavorites();
+  }
+
   updateActiveNavigation(sectionId);
+}
+
+function getInitialSection() {
+  try {
+    const savedSection = localStorage.getItem(
+      LAST_SECTION_STORAGE_KEY
+    );
+
+    if (savedSection && isValidSection(savedSection)) {
+      return savedSection;
+    }
+  } catch (error) {
+    console.warn("Could not restore the previous section.", error);
+  }
+
+  return "home";
 }
 
 
@@ -142,11 +195,7 @@ document.addEventListener("click", (event) => {
     return;
   }
 
-  if (
-    navigationTarget.hasAttribute(
-      "data-category-link",
-    )
-  ) {
+  if (navigationTarget.hasAttribute("data-category-link")) {
     return;
   }
 
@@ -169,10 +218,7 @@ document.addEventListener("click", (event) => {
   }
 
   if (menuToggle) {
-    menuToggle.setAttribute(
-      "aria-expanded",
-      "false",
-    );
+    menuToggle.setAttribute("aria-expanded", "false");
   }
 });
 
@@ -188,17 +234,13 @@ async function loadDishes() {
     const response = await fetch("data/data.json");
 
     if (!response.ok) {
-      throw new Error(
-        "Failed to load menu data.",
-      );
+      throw new Error("Failed to load menu data.");
     }
 
     const data = await response.json();
 
     if (!Array.isArray(data)) {
-      throw new Error(
-        "Menu data is not valid.",
-      );
+      throw new Error("Menu data is not valid.");
     }
 
     allDishes = data;
@@ -210,10 +252,7 @@ async function loadDishes() {
     applyMenuFilters();
 
   } catch (error) {
-    console.error(
-      "Menu loading error:",
-      error,
-    );
+    console.error("Menu loading error:", error);
 
     allDishes = [];
     filteredDishes = [];
@@ -263,12 +302,6 @@ function showMenuLoading() {
     return;
   }
 
-  /*
-      Keep the approved skeleton structure.
-      We use placeholder cards only while the
-      JSON file itself is loading.
-  */
-
   menuList.innerHTML = "";
 
   for (let i = 0; i < 3; i++) {
@@ -287,31 +320,20 @@ function showMenuLoading() {
 function createLoadingSkeleton() {
   return `
     <article class="dish-card is-loading">
-
       <div class="dish-image-wrapper">
-
         <div class="dish-skeleton-image"></div>
-
       </div>
 
       <div class="dish-card-content">
-
         <div class="dish-text-skeleton skeleton-title"></div>
-
         <div class="dish-text-skeleton skeleton-description"></div>
-
         <div class="dish-text-skeleton skeleton-description short"></div>
 
         <div class="dish-card-bottom">
-
           <div class="dish-text-skeleton skeleton-price"></div>
-
           <div class="dish-text-skeleton skeleton-button"></div>
-
         </div>
-
       </div>
-
     </article>
   `;
 }
@@ -325,42 +347,30 @@ function applyMenuFilters() {
   const searchValue =
     menuSearch?.value.trim().toLowerCase() || "";
 
-  const urlParams =
-    new URLSearchParams(
-      window.location.search,
-    );
+  const urlParams = new URLSearchParams(
+    window.location.search,
+  );
 
   const selectedCategory =
     urlParams.get("category") || "all";
 
-  filteredDishes = allDishes.filter(
-    (dish) => {
-      const matchesSearch =
-        dish.name
-          .toLowerCase()
-          .includes(searchValue) ||
-        dish.description
-          .toLowerCase()
-          .includes(searchValue);
+  filteredDishes = allDishes.filter((dish) => {
+    const name = String(dish.name || "").toLowerCase();
+    const description = String(dish.description || "").toLowerCase();
 
-      const matchesCategory =
-        selectedCategory === "all" ||
-        dish.category === selectedCategory;
+    const matchesSearch =
+      name.includes(searchValue) ||
+      description.includes(searchValue);
 
-      return (
-        matchesSearch &&
-        matchesCategory
-      );
-    },
-  );
+    const matchesCategory =
+      selectedCategory === "all" ||
+      dish.category === selectedCategory;
 
-  updateCategoryButtons(
-    selectedCategory,
-  );
+    return matchesSearch && matchesCategory;
+  });
 
-  renderDishesWithSkeleton(
-    filteredDishes,
-  );
+  updateCategoryButtons(selectedCategory);
+  renderDishesWithSkeleton(filteredDishes);
 }
 
 
@@ -381,38 +391,19 @@ function renderDishesWithSkeleton(dishes) {
     menuResultInfo.hidden = true;
   }
 
-  /*
-      If there are no matching dishes,
-      do not wait 2 seconds.
-  */
-
   if (dishes.length === 0) {
     renderDishes(dishes);
     return;
   }
 
-  /*
-      Create the REAL dish cards immediately.
-
-      They receive .is-loading.
-
-      This is the important part of the
-      approved skeleton behavior.
-  */
-
   menuList.innerHTML = dishes
     .map((dish) => createDishCard(dish, true))
     .join("");
 
-  /*
-      Keep the skeleton visible for 2 seconds.
-  */
-
   setTimeout(() => {
-    const loadingCards =
-      menuList.querySelectorAll(
-        ".dish-card.is-loading",
-      );
+    const loadingCards = menuList.querySelectorAll(
+      ".dish-card.is-loading",
+    );
 
     loadingCards.forEach((card) => {
       card.classList.remove("is-loading");
@@ -424,17 +415,10 @@ function renderDishesWithSkeleton(dishes) {
 
     if (menuResultCount) {
       menuResultCount.textContent =
-        `${dishes.length} ${
-          dishes.length === 1
-            ? "dish"
-            : "dishes"
-        }`;
+        `${dishes.length} ${dishes.length === 1 ? "dish" : "dishes"}`;
     }
 
-    if (
-      typeof updateFavoriteButtons ===
-      "function"
-    ) {
+    if (typeof updateFavoriteButtons === "function") {
       updateFavoriteButtons();
     }
   }, 2000);
@@ -465,9 +449,7 @@ function renderDishes(dishes) {
   }
 
   menuList.innerHTML = dishes
-    .map((dish) =>
-      createDishCard(dish, false),
-    )
+    .map((dish) => createDishCard(dish, false))
     .join("");
 
   if (menuResultInfo) {
@@ -476,17 +458,10 @@ function renderDishes(dishes) {
 
   if (menuResultCount) {
     menuResultCount.textContent =
-      `${dishes.length} ${
-        dishes.length === 1
-          ? "dish"
-          : "dishes"
-      }`;
+      `${dishes.length} ${dishes.length === 1 ? "dish" : "dishes"}`;
   }
 
-  if (
-    typeof updateFavoriteButtons ===
-    "function"
-  ) {
+  if (typeof updateFavoriteButtons === "function") {
     updateFavoriteButtons();
   }
 }
@@ -496,10 +471,7 @@ function renderDishes(dishes) {
    CREATE DISH CARD
    ========================================================= */
 
-function createDishCard(
-  dish,
-  isLoading = false,
-) {
+function createDishCard(dish, isLoading = false) {
   const favorite =
     typeof isFavorite === "function"
       ? isFavorite(dish.id)
@@ -507,14 +479,10 @@ function createDishCard(
 
   return `
     <article
-      class="dish-card ${
-        isLoading ? "is-loading" : ""
-      }"
-      data-dish-id="${dish.id}"
+      class="dish-card ${isLoading ? "is-loading" : ""}"
+      data-dish-id="${escapeHTML(dish.id)}"
     >
-
       <div class="dish-image-wrapper">
-
         <img
           src="${escapeHTML(dish.image)}"
           alt="${escapeHTML(dish.name)}"
@@ -524,47 +492,25 @@ function createDishCard(
 
         <button
           type="button"
-          class="favorite-button ${
-            favorite ? "active" : ""
-          }"
-          data-favorite-id="${dish.id}"
-          aria-label="${
-            favorite
-              ? "Remove from favorites"
-              : "Add to favorites"
-          }"
+          class="favorite-button ${favorite ? "active" : ""}"
+          data-favorite-id="${escapeHTML(dish.id)}"
+          aria-label="${favorite ? "Remove from favorites" : "Add to favorites"}"
           aria-pressed="${favorite}"
         >
           ${favorite ? "♥" : "♡"}
         </button>
 
-        ${
-          dish.spicy
-            ? `<span class="dish-spicy-badge">🌶 Spicy</span>`
-            : ""
-        }
+        ${dish.spicy ? '<span class="dish-spicy-badge">🌶 Spicy</span>' : ""}
 
-        <!-- Skeleton image overlay -->
         <div class="dish-skeleton-image"></div>
-
       </div>
 
       <div class="dish-card-content">
-
         <div class="dish-card-top">
-
           <div>
-
-            <h3>
-              ${escapeHTML(dish.name)}
-            </h3>
-
-            <span class="dish-category">
-              ${escapeHTML(dish.category)}
-            </span>
-
+            <h3>${escapeHTML(dish.name)}</h3>
+            <span class="dish-category">${escapeHTML(dish.category)}</span>
           </div>
-
         </div>
 
         <p class="dish-description">
@@ -572,7 +518,6 @@ function createDishCard(
         </p>
 
         <div class="dish-card-bottom">
-
           <strong class="dish-price">
             ${formatPrice(dish.price)}
           </strong>
@@ -580,34 +525,23 @@ function createDishCard(
           <button
             type="button"
             class="dish-add-button"
-            data-add-to-cart="${dish.id}"
+            data-add-to-cart="${escapeHTML(dish.id)}"
           >
             Add to Cart
           </button>
-
         </div>
-
       </div>
 
-      <!-- Skeleton text overlays -->
       <div class="dish-skeleton-content">
-
         <div class="dish-text-skeleton skeleton-title"></div>
-
         <div class="dish-text-skeleton skeleton-description"></div>
-
         <div class="dish-text-skeleton skeleton-description short"></div>
 
         <div class="dish-card-bottom">
-
           <div class="dish-text-skeleton skeleton-price"></div>
-
           <div class="dish-text-skeleton skeleton-button"></div>
-
         </div>
-
       </div>
-
     </article>
   `;
 }
@@ -627,7 +561,7 @@ function formatPrice(price) {
    ========================================================= */
 
 function escapeHTML(value) {
-  return String(value)
+  return String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -640,60 +574,30 @@ function escapeHTML(value) {
    CATEGORY BUTTONS
    ========================================================= */
 
-function updateCategoryButtons(
-  selectedCategory,
-) {
+function updateCategoryButtons(selectedCategory) {
   categoryButtons.forEach((button) => {
-    const category =
-      button.dataset.category;
+    const category = button.dataset.category;
+    const isActive = category === selectedCategory;
 
-    const isActive =
-      category === selectedCategory;
-
-    button.classList.toggle(
-      "active",
-      isActive,
-    );
-
-    button.setAttribute(
-      "aria-pressed",
-      isActive,
-    );
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
   });
 }
 
-
 categoryButtons.forEach((button) => {
-  button.addEventListener(
-    "click",
-    () => {
-      const category =
-        button.dataset.category || "all";
+  button.addEventListener("click", () => {
+    const category = button.dataset.category || "all";
+    const url = new URL(window.location.href);
 
-      const url = new URL(
-        window.location.href,
-      );
+    if (category === "all") {
+      url.searchParams.delete("category");
+    } else {
+      url.searchParams.set("category", category);
+    }
 
-      if (category === "all") {
-        url.searchParams.delete(
-          "category",
-        );
-      } else {
-        url.searchParams.set(
-          "category",
-          category,
-        );
-      }
-
-      window.history.pushState(
-        {},
-        "",
-        url,
-      );
-
-      applyMenuFilters();
-    },
-  );
+    window.history.pushState({}, "", url);
+    applyMenuFilters();
+  });
 });
 
 
@@ -702,33 +606,25 @@ categoryButtons.forEach((button) => {
    ========================================================= */
 
 if (menuSearch) {
-  menuSearch.addEventListener(
-    "input",
-    () => {
-      applyMenuFilters();
+  menuSearch.addEventListener("input", () => {
+    applyMenuFilters();
 
-      if (clearSearchButton) {
-        clearSearchButton.hidden =
-          menuSearch.value.trim() === "";
-      }
-    },
-  );
+    if (clearSearchButton) {
+      clearSearchButton.hidden = menuSearch.value.trim() === "";
+    }
+  });
 }
 
-
 if (clearSearchButton) {
-  clearSearchButton.addEventListener(
-    "click",
-    () => {
+  clearSearchButton.addEventListener("click", () => {
+    if (menuSearch) {
       menuSearch.value = "";
+    }
 
-      clearSearchButton.hidden = true;
-
-      applyMenuFilters();
-
-      menuSearch.focus();
-    },
-  );
+    clearSearchButton.hidden = true;
+    applyMenuFilters();
+    menuSearch?.focus();
+  });
 }
 
 
@@ -737,32 +633,22 @@ if (clearSearchButton) {
    ========================================================= */
 
 if (clearMenuFiltersButton) {
-  clearMenuFiltersButton.addEventListener(
-    "click",
-    () => {
+  clearMenuFiltersButton.addEventListener("click", () => {
+    if (menuSearch) {
       menuSearch.value = "";
+    }
 
-      const url = new URL(
-        window.location.href,
-      );
+    const url = new URL(window.location.href);
+    url.searchParams.delete("category");
 
-      url.searchParams.delete(
-        "category",
-      );
+    window.history.pushState({}, "", url);
 
-      window.history.pushState(
-        {},
-        "",
-        url,
-      );
+    if (clearSearchButton) {
+      clearSearchButton.hidden = true;
+    }
 
-      if (clearSearchButton) {
-        clearSearchButton.hidden = true;
-      }
-
-      applyMenuFilters();
-    },
-  );
+    applyMenuFilters();
+  });
 }
 
 
@@ -771,12 +657,7 @@ if (clearMenuFiltersButton) {
    ========================================================= */
 
 if (retryMenuButton) {
-  retryMenuButton.addEventListener(
-    "click",
-    () => {
-      loadDishes();
-    },
-  );
+  retryMenuButton.addEventListener("click", loadDishes);
 }
 
 
@@ -784,12 +665,9 @@ if (retryMenuButton) {
    BROWSER BACK / FORWARD
    ========================================================= */
 
-window.addEventListener(
-  "popstate",
-  () => {
-    applyMenuFilters();
-  },
-);
+window.addEventListener("popstate", () => {
+  applyMenuFilters();
+});
 
 
 /* =========================================================
@@ -802,6 +680,7 @@ function openDishModal(dish) {
   }
 
   selectedDish = dish;
+  previousDishModalFocus = document.activeElement;
 
   if (dishModalImage) {
     dishModalImage.innerHTML = `
@@ -813,30 +692,23 @@ function openDishModal(dish) {
   }
 
   if (dishModalTitle) {
-    dishModalTitle.textContent =
-      dish.name;
+    dishModalTitle.textContent = dish.name;
   }
 
   if (dishModalDescription) {
-    dishModalDescription.textContent =
-      dish.description;
+    dishModalDescription.textContent = dish.description;
   }
 
   if (dishModalPrice) {
-    dishModalPrice.textContent =
-      formatPrice(dish.price);
+    dishModalPrice.textContent = formatPrice(dish.price);
   }
 
   if (dishModalCategory) {
-    dishModalCategory.textContent =
-      dish.category;
+    dishModalCategory.textContent = dish.category;
   }
 
   if (dishModalSpicy) {
-    dishModalSpicy.textContent =
-      dish.spicy
-        ? "🌶 Spicy"
-        : "Mild";
+    dishModalSpicy.textContent = dish.spicy ? "🌶 Spicy" : "Mild";
   }
 
   if (dishModalIngredients) {
@@ -844,51 +716,53 @@ function openDishModal(dish) {
       "Prepared with traditional Ethiopian ingredients and spices.";
   }
 
-  dishModal.hidden = false;
+  // Keep the modal outside the main sections so section navigation
+  // cannot hide it or constrain it to the menu section.
+  if (dishModal.parentElement !== document.body) {
+    document.body.appendChild(dishModal);
+  }
 
-  document.body.classList.add(
-    "modal-open",
-  );
+  dishModal.hidden = false;
+  document.body.classList.add("modal-open");
+
+  closeDishModalButton?.focus();
 }
 
-
 function closeDishModal() {
-  if (!dishModal) {
+  if (!dishModal || dishModal.hidden) {
     return;
   }
 
   dishModal.hidden = true;
-
-  document.body.classList.remove(
-    "modal-open",
-  );
+  document.body.classList.remove("modal-open");
 
   selectedDish = null;
-}
 
+  if (
+    previousDishModalFocus &&
+    typeof previousDishModalFocus.focus === "function" &&
+    document.contains(previousDishModalFocus)
+  ) {
+    previousDishModalFocus.focus();
+  }
+
+  previousDishModalFocus = null;
+}
 
 if (closeDishModalButton) {
-  closeDishModalButton.addEventListener(
-    "click",
-    closeDishModal,
-  );
+  closeDishModalButton.addEventListener("click", closeDishModal);
 }
 
-
 if (dishModal) {
-  dishModal.addEventListener(
-    "click",
-    (event) => {
-      if (
-        event.target === dishModal ||
-        event.target.closest(
-          "[data-close-modal]",
-        )
-      ) {
-        closeDishModal();
-      }
-    },
-  );
+  dishModal.addEventListener("click", (event) => {
+    if (
+      event.target === dishModal ||
+      event.target.closest("[data-close-modal]") ||
+      event.target.classList.contains("modal-backdrop")
+    ) {
+      closeDishModal();
+    }
+  });
 }
 
 
@@ -897,106 +771,46 @@ if (dishModal) {
    ========================================================= */
 
 if (menuList) {
-  menuList.addEventListener(
-    "click",
-    (event) => {
+  menuList.addEventListener("click", (event) => {
+    const addButton = event.target.closest("[data-add-to-cart]");
 
-      const addButton =
-        event.target.closest(
-          "[data-add-to-cart]",
-        );
+    if (addButton) {
+      const dishId = Number(addButton.dataset.addToCart);
+      const dish = allDishes.find((item) => item.id === dishId);
 
-      if (addButton) {
-        const dishId =
-          Number(
-            addButton.dataset.addToCart,
-          );
-
-        const dish =
-          allDishes.find(
-            (item) =>
-              item.id === dishId,
-          );
-
-        if (
-          dish &&
-          typeof addToCart ===
-            "function"
-        ) {
-          addToCart(dish);
-        }
-
-        return;
+      if (dish && typeof addToCart === "function") {
+        addToCart(dish);
       }
 
+      return;
+    }
 
-      const favoriteButton =
-        event.target.closest(
-          "[data-favorite-id]",
-        );
+    const favoriteButton = event.target.closest("[data-favorite-id]");
 
-      if (favoriteButton) {
-        const dishId =
-          Number(
-            favoriteButton.dataset
-              .favoriteId,
-          );
+    if (favoriteButton) {
+      const dishId = Number(favoriteButton.dataset.favoriteId);
+      const dish = allDishes.find((item) => item.id === dishId);
 
-        const dish =
-          allDishes.find(
-            (item) =>
-              item.id === dishId,
-          );
-
-        if (
-          dish &&
-          typeof toggleFavorite ===
-            "function"
-        ) {
-          toggleFavorite(dish);
-        }
-
-        return;
+      if (dish && typeof toggleFavorite === "function") {
+        toggleFavorite(dish);
       }
 
+      return;
+    }
 
-      const card =
-        event.target.closest(
-          ".dish-card",
-        );
+    const card = event.target.closest(".dish-card");
 
-      if (!card) {
-        return;
-      }
+    if (!card || card.classList.contains("is-loading")) {
+      return;
+    }
 
-      /*
-          Do not open the dish modal while
-          the card is showing the skeleton.
-      */
-      if (
-        card.classList.contains(
-          "is-loading",
-        )
-      ) {
-        return;
-      }
+    const dishId = Number(card.dataset.dishId);
+    const dish = allDishes.find((item) => item.id === dishId);
 
-      const dishId =
-        Number(
-          card.dataset.dishId,
-        );
-
-      const dish =
-        allDishes.find(
-          (item) =>
-            item.id === dishId,
-        );
-
-      if (dish) {
-        openDishModal(dish);
-      }
-    },
-  );
+    if (dish) {
+      openDishModal(dish);
+    }
+  });
 }
 
 
@@ -1005,20 +819,12 @@ if (menuList) {
    ========================================================= */
 
 if (dishModalAdd) {
-  dishModalAdd.addEventListener(
-    "click",
-    () => {
-      if (
-        selectedDish &&
-        typeof addToCart ===
-          "function"
-      ) {
-        addToCart(selectedDish);
-
-        closeDishModal();
-      }
-    },
-  );
+  dishModalAdd.addEventListener("click", () => {
+    if (selectedDish && typeof addToCart === "function") {
+      addToCart(selectedDish);
+      closeDishModal();
+    }
+  });
 }
 
 
@@ -1026,14 +832,11 @@ if (dishModalAdd) {
    KEYBOARD ACCESSIBILITY
    ========================================================= */
 
-document.addEventListener(
-  "keydown",
-  (event) => {
-    if (event.key === "Escape") {
-      closeDishModal();
-    }
-  },
-);
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeDishModal();
+  }
+});
 
 
 /* =========================================================
@@ -1041,34 +844,20 @@ document.addEventListener(
    ========================================================= */
 
 const mobileMenuToggle =
-  document.getElementById(
-    "mobile-menu-toggle",
-  );
+  document.getElementById("mobile-menu-toggle");
 
 const mainNavigation =
-  document.getElementById(
-    "main-navigation",
-  );
+  document.getElementById("main-navigation");
 
+if (mobileMenuToggle && mainNavigation) {
+  mobileMenuToggle.addEventListener("click", () => {
+    const isOpen = mainNavigation.classList.toggle("open");
 
-if (
-  mobileMenuToggle &&
-  mainNavigation
-) {
-  mobileMenuToggle.addEventListener(
-    "click",
-    () => {
-      const isOpen =
-        mainNavigation.classList.toggle(
-          "open",
-        );
-
-      mobileMenuToggle.setAttribute(
-        "aria-expanded",
-        isOpen,
-      );
-    },
-  );
+    mobileMenuToggle.setAttribute(
+      "aria-expanded",
+      String(isOpen)
+    );
+  });
 }
 
 
@@ -1077,43 +866,33 @@ if (
    ========================================================= */
 
 function initializeApp() {
+  // Restore the customer's last section instead of always showing Home.
+  showSection(getInitialSection());
 
-  showSection("home");
+  // Move the modal out of any section that could become hidden.
+  if (dishModal && dishModal.parentElement !== document.body) {
+    document.body.appendChild(dishModal);
+  }
 
   loadDishes();
 
-  if (
-    typeof updateFavoriteButtons ===
-    "function"
-  ) {
+  if (typeof updateFavoriteButtons === "function") {
     updateFavoriteButtons();
   }
 
-  if (
-    typeof updateCartBadge ===
-    "function"
-  ) {
+  if (typeof updateCartBadge === "function") {
     updateCartBadge();
   }
 
-  if (
-    typeof renderFavorites ===
-    "function"
-  ) {
+  if (typeof renderFavorites === "function") {
     renderFavorites();
   }
 
-  if (
-    typeof renderOrders ===
-    "function"
-  ) {
+  if (typeof renderOrders === "function") {
     renderOrders();
   }
 
-  if (
-    typeof refreshCheckout ===
-    "function"
-  ) {
+  if (typeof refreshCheckout === "function") {
     refreshCheckout();
   }
 }
@@ -1123,104 +902,69 @@ function initializeApp() {
    START APP
    ========================================================= */
 
-document.addEventListener(
-  "DOMContentLoaded",
-  initializeApp,
-);
+document.addEventListener("DOMContentLoaded", initializeApp);
 
 
 /* =========================================================
    DARK / LIGHT THEME
    ========================================================= */
 
-const themeToggle =
-  document.getElementById("theme-toggle");
+const themeToggle = document.getElementById("theme-toggle");
+const themeIcon = document.getElementById("theme-icon");
 
-const themeIcon =
-  document.getElementById("theme-icon");
-
-const THEME_STORAGE_KEY =
-  "addiseats_theme";
-
+const THEME_STORAGE_KEY = "addiseats_theme";
 
 function applyTheme(theme) {
   if (theme === "dark") {
-
-    document.documentElement.setAttribute(
-      "data-theme",
-      "dark"
-    );
+    document.documentElement.setAttribute("data-theme", "dark");
 
     if (themeIcon) {
       themeIcon.textContent = "☀";
     }
 
     if (themeToggle) {
-      themeToggle.setAttribute(
-        "aria-label",
-        "Switch to light mode"
-      );
+      themeToggle.setAttribute("aria-label", "Switch to light mode");
     }
-
   } else {
-
-    document.documentElement.setAttribute(
-      "data-theme",
-      "light"
-    );
+    document.documentElement.setAttribute("data-theme", "light");
 
     if (themeIcon) {
       themeIcon.textContent = "☾";
     }
 
     if (themeToggle) {
-      themeToggle.setAttribute(
-        "aria-label",
-        "Switch to dark mode"
-      );
+      themeToggle.setAttribute("aria-label", "Switch to dark mode");
     }
   }
 }
-
 
 function initializeTheme() {
-  const savedTheme =
-    localStorage.getItem(
-      THEME_STORAGE_KEY
-    );
+  let savedTheme = "light";
 
-  if (savedTheme === "dark") {
-    applyTheme("dark");
-  } else {
-    applyTheme("light");
+  try {
+    savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || "light";
+  } catch (error) {
+    console.warn("Could not load the saved theme.", error);
   }
-}
 
+  applyTheme(savedTheme === "dark" ? "dark" : "light");
+}
 
 if (themeToggle) {
-  themeToggle.addEventListener(
-    "click",
-    () => {
+  themeToggle.addEventListener("click", () => {
+    const currentTheme =
+      document.documentElement.getAttribute("data-theme");
 
-      const currentTheme =
-        document.documentElement.getAttribute(
-          "data-theme"
-        );
+    const newTheme = currentTheme === "dark" ? "light" : "dark";
 
-      const newTheme =
-        currentTheme === "dark"
-          ? "light"
-          : "dark";
-
-      localStorage.setItem(
-        THEME_STORAGE_KEY,
-        newTheme
-      );
-
-      applyTheme(newTheme);
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+    } catch (error) {
+      console.warn("Could not save the selected theme.", error);
     }
-  );
-}
 
+    applyTheme(newTheme);
+  });
+}
 
 initializeTheme();
