@@ -1,0 +1,517 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Manage Addis Eats dishes, customer orders, and sales."
+  />
+  <meta name="theme-color" content="#176b4d" />
+
+  <title>Admin Dashboard | Addis Eats</title>
+
+  <link rel="stylesheet" href="css/admin.css" />
+  <script src="js/admin.js" defer></script>
+</head>
+
+<body class="admin-dashboard-page">
+  <div class="admin-dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="dashboard-sidebar" id="dashboard-sidebar">
+      <a class="admin-brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">AE</span>
+        <span>Addis Eats</span>
+      </a>
+
+      <div class="sidebar-label">WORKSPACE</div>
+
+      <nav class="dashboard-nav" aria-label="Admin navigation">
+        <a class="dashboard-nav-link active" href="#overview" data-admin-section="overview">
+          <span aria-hidden="true">▦</span>
+          <span>Overview</span>
+        </a>
+
+        <a class="dashboard-nav-link" href="#menu-management" data-admin-section="menu-management">
+          <span aria-hidden="true">☷</span>
+          <span>Menu management</span>
+        </a>
+
+        <a class="dashboard-nav-link" href="#order-management" data-admin-section="order-management">
+          <span aria-hidden="true">▤</span>
+          <span>Orders</span>
+          <span class="sidebar-count" id="sidebar-pending-count">0</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="admin-profile">
+          <div class="admin-avatar" aria-hidden="true">A</div>
+          <div class="admin-profile-info">
+            <strong id="sidebar-admin-name">Administrator</strong>
+            <span>Store manager</span>
+          </div>
+        </div>
+
+        <button class="sidebar-logout-button" id="admin-logout-button" type="button">
+          <span aria-hidden="true">↪</span>
+          Sign out
+        </button>
+
+        <a class="back-to-store-link" href="index.html">
+          ← View customer storefront
+        </a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+      <header class="dashboard-topbar">
+        <div class="dashboard-topbar-heading">
+          <button
+            class="mobile-menu-button"
+            id="mobile-menu-button"
+            type="button"
+            aria-label="Open dashboard navigation"
+            aria-controls="dashboard-sidebar"
+            aria-expanded="false"
+          >
+            ☰
+          </button>
+
+          <div>
+            <p class="eyebrow">ADDIS EATS / ADMIN</p>
+            <h1 id="dashboard-page-title">Dashboard overview</h1>
+          </div>
+        </div>
+
+        <div class="dashboard-topbar-actions">
+          <span class="dashboard-date" id="dashboard-current-date"></span>
+          <a class="view-store-button" href="index.html" target="_blank" rel="noopener noreferrer">
+            View storefront ↗
+          </a>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+
+        <!-- OVERVIEW -->
+        <section
+          class="admin-content-section active"
+          id="overview"
+          data-admin-panel="overview"
+        >
+          <div class="dashboard-welcome">
+            <div>
+              <h2>Welcome back, <span id="welcome-admin-name">Admin</span>!</h2>
+              <p>Here is what's happening with your restaurant today.</p>
+            </div>
+
+            <span class="store-status">
+              <span class="status-dot" aria-hidden="true"></span>
+              Store dashboard
+            </span>
+          </div>
+
+          <!-- SUMMARY CARDS -->
+          <div class="dashboard-stats-grid">
+
+            <article class="dashboard-stat-card">
+              <div class="stat-card-top">
+                <span class="stat-label">Total dishes</span>
+                <span class="stat-icon green-icon" aria-hidden="true">♨</span>
+              </div>
+              <p class="stat-value" id="stat-total-dishes">—</p>
+              <p class="stat-description">
+                <span id="stat-active-dishes">—</span> available to customers
+              </p>
+            </article>
+
+            <article class="dashboard-stat-card">
+              <div class="stat-card-top">
+                <span class="stat-label">Total orders</span>
+                <span class="stat-icon gold-icon" aria-hidden="true">▤</span>
+              </div>
+              <p class="stat-value" id="stat-total-orders">—</p>
+              <p class="stat-description">Orders recorded in this browser</p>
+            </article>
+
+            <article class="dashboard-stat-card">
+              <div class="stat-card-top">
+                <span class="stat-label">Total revenue</span>
+                <span class="stat-icon purple-icon" aria-hidden="true">₿</span>
+              </div>
+              <p class="stat-value" id="stat-total-revenue">— ETB</p>
+              <p class="stat-description">Based on recorded order totals</p>
+            </article>
+
+            <article class="dashboard-stat-card">
+              <div class="stat-card-top">
+                <span class="stat-label">Pending orders</span>
+                <span class="stat-icon orange-icon" aria-hidden="true">◷</span>
+              </div>
+              <p class="stat-value" id="stat-pending-orders">—</p>
+              <p class="stat-description">Orders awaiting completion</p>
+            </article>
+
+          </div>
+
+          <!-- CHARTS -->
+          <div class="dashboard-charts-grid">
+
+            <article class="dashboard-panel sales-panel">
+              <div class="panel-heading">
+                <div>
+                  <h3>Sales overview</h3>
+                  <p>Revenue from recorded orders</p>
+                </div>
+
+                <label class="chart-filter-label" for="sales-chart-period">
+                  Period
+                </label>
+                <select id="sales-chart-period">
+                  <option value="7">Last 7 days</option>
+                  <option value="30">Last 30 days</option>
+                </select>
+              </div>
+
+              <div class="chart-summary">
+                <p id="chart-total-revenue">0 ETB</p>
+                <span id="chart-period-description">Last 7 days</span>
+              </div>
+
+              <div
+                class="sales-chart"
+                id="sales-chart"
+                role="img"
+                aria-label="Sales chart will appear when dashboard data is loaded"
+              >
+                <div class="chart-empty-state">
+                  <span aria-hidden="true">▥</span>
+                  <p>Sales chart will appear here.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="dashboard-panel order-status-panel">
+              <div class="panel-heading">
+                <div>
+                  <h3>Order status</h3>
+                  <p>Current order breakdown</p>
+                </div>
+              </div>
+
+              <div
+                class="order-status-chart"
+                id="order-status-chart"
+                role="img"
+                aria-label="Order status chart will appear when dashboard data is loaded"
+              >
+                <div class="chart-empty-state">
+                  <span aria-hidden="true">◉</span>
+                  <p>Order status breakdown will appear here.</p>
+                </div>
+              </div>
+
+              <div class="order-status-legend" id="order-status-legend"></div>
+            </article>
+
+          </div>
+
+          <!-- RECENT ORDERS -->
+          <article class="dashboard-panel recent-orders-panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Recent orders</h3>
+                <p>The latest customer orders recorded in this browser</p>
+              </div>
+
+              <button
+                class="text-action-button"
+                type="button"
+                data-open-admin-section="order-management"
+              >
+                View all orders →
+              </button>
+            </div>
+
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Order</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-orders-table">
+                  <tr>
+                    <td colspan="5" class="table-empty-state">
+                      Order data will appear here.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <!-- MENU MANAGEMENT -->
+        <section
+          class="admin-content-section"
+          id="menu-management"
+          data-admin-panel="menu-management"
+          hidden
+        >
+          <div class="section-intro">
+            <div>
+              <h2>Menu management</h2>
+              <p>Add dishes, update prices, and control what customers can order.</p>
+            </div>
+
+            <button class="admin-primary-button" id="add-dish-button" type="button">
+              <span aria-hidden="true">＋</span> Add dish
+            </button>
+          </div>
+
+          <div class="menu-management-toolbar">
+            <label class="admin-search-field">
+              <span class="visually-hidden">Search dishes</span>
+              <span aria-hidden="true">⌕</span>
+              <input id="admin-menu-search" type="search" placeholder="Search dishes..." />
+            </label>
+
+            <label class="admin-select-field">
+              <span class="visually-hidden">Filter dishes by category</span>
+              <select id="admin-menu-category">
+                <option value="all">All categories</option>
+              </select>
+            </label>
+
+            <label class="admin-select-field">
+              <span class="visually-hidden">Filter dishes by availability</span>
+              <select id="admin-menu-availability">
+                <option value="all">All availability</option>
+                <option value="available">Available</option>
+                <option value="disabled">Disabled</option>
+              </select>
+            </label>
+          </div>
+
+          <article class="dashboard-panel menu-table-panel">
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Dish</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Availability</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-menu-table">
+                  <tr>
+                    <td colspan="5" class="table-empty-state">
+                      Menu data will appear here.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-footer">
+              <span id="admin-menu-count">0 dishes</span>
+            </div>
+          </article>
+        </section>
+
+        <!-- ORDER MANAGEMENT -->
+        <section
+          class="admin-content-section"
+          id="order-management"
+          data-admin-panel="order-management"
+          hidden
+        >
+          <div class="section-intro">
+            <div>
+              <h2>Order management</h2>
+              <p>Review orders and update their progress from preparation to delivery.</p>
+            </div>
+
+            <button class="admin-secondary-button" id="refresh-orders-button" type="button">
+              ↻ Refresh orders
+            </button>
+          </div>
+
+          <div class="order-management-summary">
+            <div class="mini-summary-card">
+              <span>Total orders</span>
+              <strong id="orders-summary-total">0</strong>
+            </div>
+            <div class="mini-summary-card">
+              <span>Pending</span>
+              <strong id="orders-summary-pending">0</strong>
+            </div>
+            <div class="mini-summary-card">
+              <span>Preparing</span>
+              <strong id="orders-summary-preparing">0</strong>
+            </div>
+            <div class="mini-summary-card">
+              <span>Completed</span>
+              <strong id="orders-summary-completed">0</strong>
+            </div>
+          </div>
+
+          <div class="menu-management-toolbar">
+            <label class="admin-search-field">
+              <span class="visually-hidden">Search orders</span>
+              <span aria-hidden="true">⌕</span>
+              <input id="admin-order-search" type="search" placeholder="Search order or customer..." />
+            </label>
+
+            <label class="admin-select-field">
+              <span class="visually-hidden">Filter orders by status</span>
+              <select id="admin-order-status-filter">
+                <option value="all">All statuses</option>
+                <option value="pending">Pending</option>
+                <option value="preparing">Preparing</option>
+                <option value="ready">Ready</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </label>
+          </div>
+
+          <article class="dashboard-panel orders-table-panel">
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Order</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Items</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Update status</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-orders-table">
+                  <tr>
+                    <td colspan="7" class="table-empty-state">
+                      Order data will appear here.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+      </div>
+
+      <footer class="dashboard-footer">
+        <span>© <span id="dashboard-year"></span> Addis Eats</span>
+        <span>Admin portfolio demonstration</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- ADD / EDIT DISH DIALOG -->
+  <dialog class="admin-dialog" id="dish-dialog" aria-labelledby="dish-dialog-title">
+    <form id="dish-form" class="admin-dialog-form">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">MENU MANAGEMENT</p>
+          <h2 id="dish-dialog-title">Add a dish</h2>
+        </div>
+
+        <button
+          class="dialog-close-button"
+          id="close-dish-dialog"
+          type="button"
+          aria-label="Close dish form"
+        >
+          ×
+        </button>
+      </div>
+
+      <input id="dish-id" name="id" type="hidden" />
+
+      <div class="admin-field">
+        <label for="dish-name">Dish name</label>
+        <input id="dish-name" name="name" type="text" maxlength="100" required />
+      </div>
+
+      <div class="admin-field">
+        <label for="dish-description">Description</label>
+        <textarea id="dish-description" name="description" rows="3" maxlength="500" required></textarea>
+      </div>
+
+      <div class="admin-form-row">
+        <div class="admin-field">
+          <label for="dish-price">Price (ETB)</label>
+          <input id="dish-price" name="price" type="number" min="0.01" step="0.01" required />
+        </div>
+
+        <div class="admin-field">
+          <label for="dish-category">Category</label>
+          <input
+            id="dish-category"
+            name="category"
+            type="text"
+            list="dish-category-options"
+            maxlength="60"
+            required
+          />
+          <datalist id="dish-category-options">
+            <option value="fasting"></option>
+            <option value="traditional"></option>
+            <option value="breakfast"></option>
+            <option value="snacks"></option>
+            <option value="fast-food"></option>
+            <option value="drinks"></option>
+          </datalist>
+        </div>
+      </div>
+
+      <div class="admin-field">
+        <label for="dish-image">Image path or URL</label>
+        <input
+          id="dish-image"
+          name="image"
+          type="text"
+          maxlength="500"
+          placeholder="images/shiro.png"
+          required
+        />
+        <p class="field-hint">Use an existing project image path, such as images/shiro.png.</p>
+      </div>
+
+      <label class="admin-checkbox-field">
+        <input id="dish-spicy" name="spicy" type="checkbox" />
+        <span>Mark this dish as spicy</span>
+      </label>
+
+      <div class="dialog-actions">
+        <button class="admin-secondary-button" id="cancel-dish-button" type="button">
+          Cancel
+        </button>
+        <button class="admin-primary-button" type="submit">
+          Save dish
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- FEEDBACK MESSAGE -->
+  <div class="admin-toast" id="admin-toast" role="status" aria-live="polite" hidden></div>
+
+</body>
+</html>

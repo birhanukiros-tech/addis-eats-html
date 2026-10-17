@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Sign in to the Addis Eats administration dashboard."
+  />
+  <meta name="theme-color" content="#176b4d" />
+
+  <title>Admin Sign In | Addis Eats</title>
+
+  <link rel="stylesheet" href="css/admin.css" />
+  <script src="js/admin-login.js" defer></script>
+</head>
+
+<body class="admin-login-page">
+  <main class="admin-login-layout">
+    <section class="admin-brand-panel" aria-label="Addis Eats introduction">
+      <a class="admin-brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">AE</span>
+        <span>Addis Eats</span>
+      </a>
+
+      <div class="brand-message">
+        <span class="eyebrow">ADMINISTRATION PORTAL</span>
+        <h1>Good food.<br />Better management.</h1>
+        <p>
+          Manage your menu, review customer orders, and keep Addis Eats
+          running smoothly.
+        </p>
+      </div>
+
+      <p class="brand-footer">
+        Bringing the taste of Ethiopia closer to everyone.
+      </p>
+    </section>
+
+    <section class="admin-form-panel">
+      <div class="admin-login-card">
+        <a class="mobile-brand" href="index.html">
+          ← Back to Addis Eats
+        </a>
+
+        <div class="admin-icon" aria-hidden="true">⌘</div>
+
+        <p class="eyebrow">WELCOME BACK</p>
+        <h2>Admin sign in</h2>
+        <p class="form-intro">
+          Enter your administrator credentials to continue.
+        </p>
+
+        <div class="admin-demo-box">
+          <p class="demo-heading">Portfolio demo account</p>
+          <p>Username: <code>admin</code></p>
+          <p>Password: <code>AddisAdmin123!</code></p>
+          <p class="demo-note">
+            These credentials are for demonstration purposes only.
+          </p>
+        </div>
+
+        <form id="admin-login-form">
+          <div class="admin-field">
+            <label for="admin-username">Username</label>
+            <input
+              id="admin-username"
+              name="username"
+              type="text"
+              autocomplete="username"
+              placeholder="Enter admin username"
+              required
+            />
+          </div>
+
+          <div class="admin-field">
+            <label for="admin-password">Password</label>
+            <input
+              id="admin-password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Enter admin password"
+              required
+            />
+          </div>
+
+          <p
+            id="admin-login-error"
+            class="admin-error"
+            role="alert"
+            aria-live="polite"
+            hidden
+          ></p>
+
+          <button class="admin-submit-button" type="submit">
+            Sign in to dashboard
+            <span aria-hidden="true">→</span>
+          </button>
+        </form>
+
+        <p class="admin-back-link">
+          Customer?
+          <a href="index.html">Return to the storefront</a>
+        </p>
+      </div>
+
+      <p class="security-note">
+        Addis Eats Admin · Portfolio demonstration
+      </p>
+    </section>
+  </main>
+</body>
+</html>
